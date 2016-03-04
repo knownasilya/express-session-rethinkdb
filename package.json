@@ -1,6 +1,6 @@
 {
   "name": "rethinkdb-express-session",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "RethinkDB (official driver) session store for Express",
   "repository": "https://github.com/knownasilya/rethinkdb-express-session",
   "keywords": [
