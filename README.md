@@ -1,11 +1,14 @@
-# Express Session RethinkDB
+# rethinkdb-express-session
 
-RethinkDB session store for Express 4.x
+RethinkDB session store for Express.
+
+This module is a fork off of the [express-session-rethinkdb] module. This module takes the approach
+of using the official driver, with the option of using your own instance/version.
 
 ## Installation
 
 ```
-npm install express-session-rethinkdb --save
+npm install rethinkdb-express-session --save
 ```
 
 ## Getting started
@@ -16,7 +19,7 @@ Note that you must already have Express Session already installed (`npm install 
 var express = require('express');
 var cookie = require('cookie-parser');
 var session = require('express-session');
-var RDBStore = require('express-session-rethinkdb')(session);
+var RDBStore = require('rethinkdb-express-session')(session);
 
 var app = express();
 var rdbStore = new RDBStore({
@@ -72,6 +75,8 @@ old expired sessions from the database intermittently. This is the time interval
 
 ## Attribution
 
-*Inspired by TJ Holowaychuk's [Connect Redis](https://github.com/visionmedia/connect-redis)*
+* Forked from armenfilipetyan's [express-session-rethinkdb].
+* Inspired by TJ Holowaychuk's [Connect Redis](https://github.com/visionmedia/connect-redis)
+* Inspired by guillaumervls [Connect RethinkDB](https://github.com/guillaumervls/connect-rethinkdb)
 
-*Inspired by guillaumervls [Connect RethinkDB](https://github.com/guillaumervls/connect-rethinkdb)*
+[express-session-rethinkdb]: https://github.com/armenfilipetyan/express-session-rethinkdb
