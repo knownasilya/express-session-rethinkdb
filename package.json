@@ -1,11 +1,8 @@
 {
-  "name": "express-session-rethinkdb",
-  "version": "0.2.0",
-  "description": "RethinkDB session store for Express 4.x",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/armenfilipetyan/express-session-rethinkdb.git"
-  },
+  "name": "rethinkdb-express-session",
+  "version": "1.0.0",
+  "description": "RethinkDB (official driver) session store for Express",
+  "repository": "https://github.com/knownasilya/rethinkdb-express-session",
   "keywords": [
     "expressjs",
     "session",
@@ -15,7 +12,7 @@
     "db",
     "connect"
   ],
-  "author": "armenfilipetyan",
+  "author": "Ilya Radchenko <ilya@burstcreations.com>",
   "license": "MIT",
   "dependencies": {
     "express-session": "^1.13.0",
