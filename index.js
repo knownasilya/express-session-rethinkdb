@@ -44,7 +44,7 @@ module.exports = function (session) {
 
       r.tableCreate(table).run(conn, function (err, res) {
         if (err) {
-          console.log('Table \'' + table + '\' already exists, skipping creation -- ', err);
+          console.log('Table \'' + table + '\' already exists, skipping session table creation.');
         }
 
         setInterval(function() {
