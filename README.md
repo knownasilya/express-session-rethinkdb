@@ -2,6 +2,8 @@
 
 RethinkDB session store for Express.
 
+[![npm version](https://badge.fury.io/js/rethinkdb-express-session.svg)](http://badge.fury.io/js/rethinkdb-express-session)
+
 This module is a fork off of the [express-session-rethinkdb] module. This module takes the approach
 of using the official driver, with the option of using your own instance/version.
 
