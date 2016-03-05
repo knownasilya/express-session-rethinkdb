@@ -73,6 +73,17 @@ RethinkDB does not yet provide an expiration function ( like `SETEX` for Redis )
 old expired sessions from the database intermittently. This is the time interval in milliseconds between flushing of expired sessions.
 `Default: 60000` *60 seconds*
 
+## Debugging
+
+We use the `debug` module under the hood, so you can set the `DEBUG` env to get debug details.
+You can set the following log levels:
+
+- `DEBUG=rethinkdb-express-session:errors npm start` - Will return all errors that might help with debugging.
+- `DEBUG=rethinkdb-express-session:status npm start` - Will let you know where it is, with minimal console output.
+- `DEBUG=rethinkdb-express-session:details npm start` - Will return any raw responses from the server.
+- `DEBUG=rethinkdb-express-session:* npm start` - Will return all logs.
+
+
 ## Attribution
 
 * Forked from armenfilipetyan's [express-session-rethinkdb].

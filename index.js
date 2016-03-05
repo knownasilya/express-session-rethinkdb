@@ -1,5 +1,10 @@
 'use strict';
 
+var debug = require('debug');
+var logError = debug('rethinkdb-express-session:errors');
+var logStatus = debug('rethinkdb-express-session:status');
+var logDetails = debug('rethinkdb-express-session:details');
+
 module.exports = function (session) {
   var Store = session.Store;
 
@@ -16,14 +21,17 @@ module.exports = function (session) {
     if (!options.table) throw 'Invalid `table` option specified. Please specify a string, or leave blank for default \'sessions\' value.';
 
     Store.call(this, options);
+    logStatus('[status] Required options supplied', options);
 
     if (options.connection.then) {
+      logStatus('[status] Promise connection received');
       options.connection.then(function (conn) {
         self.emit('connect', conn);
       }).catch(function (error) {
         self.emit('disconnect', error);
       })
     } else if (typeof options.connection === 'function') {
+      logStatus('[status] Callback connection received');
       options.connection(function (error, conn) {
         if (error) {
           return self.emit('disconnect', error);
@@ -31,6 +39,9 @@ module.exports = function (session) {
 
         self.emit('connect', conn);
       });
+    } else {
+      logError('[error] Invalid connection specified: ', options.connection);
+      self.emit('disconnect', 'Invalid connection specified. Please specify a callback or a promise.');
     }
 
     this.on('connect', function (conn) {
@@ -41,20 +52,25 @@ module.exports = function (session) {
       conn.use(db);
 
       self.conn = conn;
+      logStatus('[status] connected.');
 
       r.tableCreate(table).run(conn, function (err, res) {
         if (err) {
+          logError('[error] Table create: ', err);
           console.log('Table \'' + table + '\' already exists, skipping session table creation.');
         }
 
         setInterval(function() {
           var now = new Date().getTime();
 
-          try {
-            r.db(db).table(table).filter(r.row('expires').lt(now)).delete().run(conn);
-          } catch (error) {
-            console.error(error);
-          }
+          r.table(table).filter(r.row('expires').lt(now)).delete().run(conn)
+            .then(function (res) {
+              logStatus('[status] expired sessions cleared');
+              logDetails('[details] clearing expired sessions result: ', res);
+            })
+            .catch(function (err) {
+              logError('[error] clearing expired session rows: ', err);
+            });
         }, options.flushInterval || 60000);
       });
     });
@@ -65,8 +81,9 @@ module.exports = function (session) {
   // Get Session
   RethinkStore.prototype.get = function (sid, fn) {
     r.table(this.table).get(sid).run(this.conn).then(function (data) {
+      logDetails('[details] get result: ', data);
       fn(null, data ? JSON.parse(data.session) : null);
-    }).error(function (err) {
+    }).catch(function (err) {
       fn(err);
     });
   };
@@ -83,7 +100,8 @@ module.exports = function (session) {
       if (typeof fn === 'function') {
         fn();
       }
-    }).error(function (err) {
+      logDetails('[details] set result: ', data);
+    }).catch(function (err) {
       fn(err);
     });
   };
@@ -91,10 +109,11 @@ module.exports = function (session) {
   // Destroy Session
   RethinkStore.prototype.destroy = function (sid, fn) {
     r.table(this.table).get(sid).delete().run(this.conn).then(function (data) {
-      if (typeof fn === 'function'){
+      if (typeof fn === 'function') {
         fn();
       }
-    }).error(function (err) {
+      logDetails('[details] destroy result: ', data);
+    }).catch(function (err) {
       fn(err);
     });
   };

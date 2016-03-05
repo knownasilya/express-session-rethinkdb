@@ -15,6 +15,7 @@
   "author": "Ilya Radchenko <ilya@burstcreations.com>",
   "license": "MIT",
   "dependencies": {
+    "debug": "^2.2.0",
     "express-session": "^1.13.0",
     "rethinkdb": "^2.2.2"
   }
